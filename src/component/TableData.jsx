@@ -19,7 +19,6 @@ export default function TableData() {
           "https://jsonplaceholder.typicode.com/posts"
         );
         const allData = await response.json();
-        console.log(allData);
         setData(allData);
 
         // Load first batch
