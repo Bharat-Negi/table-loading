@@ -19,6 +19,7 @@ export default function TableData() {
           "https://jsonplaceholder.typicode.com/posts"
         );
         const allData = await response.json();
+        console.log(allData);
         setData(allData);
 
         // Load first batch
@@ -52,26 +53,23 @@ export default function TableData() {
 
   // Set up Intersection Observer
   useEffect(() => {
-    if (!loaderRef.current || currentIndex >= data.length) return;
+  if (!loaderRef.current || currentIndex >= data.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const firstEntry = entries[0];
-        if (firstEntry.isIntersecting && !loading) {
-          loadMoreData();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(loaderRef.current);
-
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const first = entries[0];
+      if (first.isIntersecting && !loading) {
+        loadMoreData();
       }
-    };
-  }, [loading, currentIndex, data.length]);
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(loaderRef.current);
+
+  return () => observer.disconnect();
+}, [loading, currentIndex, data]);
+
 
   if (loadingInitial) {
     return (
@@ -94,7 +92,7 @@ export default function TableData() {
         Infinite Scroll Posts ({displayedData.length} of {data.length})
       </h3>
       <div className="table-responsive">
-        <table className="table table-bordered">
+        <table className="table table-bordered table-hover">
           <thead>
             <tr>
               <th>#</th>
@@ -104,15 +102,7 @@ export default function TableData() {
           </thead>
           <tbody>
             {displayedData.map((item) => (
-              <tr
-                key={item.id}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#f8f9fa")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "transparent")
-                }
-              >
+              <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.title}</td>
                 <td>{item.body}</td>
