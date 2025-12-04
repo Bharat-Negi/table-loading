@@ -6,7 +6,7 @@ export default function TableData() {
   const [loading, setLoading] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const batchSize = 20;
+  const batchSize = 5;
 
   const loaderRef = useRef(null);
 
